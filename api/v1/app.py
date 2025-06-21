@@ -4,7 +4,7 @@ entry point
 register app_views blueprint
 close connection
 """
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response
 from os import getenv
 from models import storage
 from api.v1.views import app_views
@@ -23,8 +23,8 @@ def close_connection(exception):
 
 
 @app.errorhandler(404)
-def error_page(error):
-    return jsonify({"error": "Not found"})
+def error_page(err):
+    return make_response(jsonify({"error": "Not found"}), 404)
 
 
 if __name__ == "__main__":
