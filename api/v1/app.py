@@ -4,7 +4,7 @@ entry point
 register app_views blueprint
 close connection
 """
-from flask import Flask
+from flask import Flask, jsonify
 from os import getenv
 from models import storage
 from api.v1.views import app_views
@@ -20,6 +20,12 @@ app.register_blueprint(app_views)
 def close_connection(exception):
     """close cureent connection"""
     storage.close()
+
+
+@app.errorhandler(404)
+def error_page(error):
+    return jsonify({"error": "Not found"})
+
 
 if __name__ == "__main__":
     app.run(host=api_host, port=api_port, threaded=True)
