@@ -43,7 +43,7 @@ def create_state():
     except:
         return make_response(jsonify("Not a JSON"), 400)
     if 'name' not in data:
-        make_response(jsonify("Missing name"), 400)
+        return make_response(jsonify("Missing name"), 400)
 
     new_state = State(**data)
     new_state.save()
