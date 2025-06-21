@@ -6,13 +6,12 @@ close connection
 """
 from flask import Flask
 from os import getenv
+from models import storage
+from api.v1.views import app_views
 
 app = Flask(__name__)
 api_host = getenv("HBNB_API_HOST")
 api_port = getenv("HBNB_API_PORT")
-
-from models import storage
-from api.v1.views import app_views
 
 app.register_blueprint(app_views)
 
