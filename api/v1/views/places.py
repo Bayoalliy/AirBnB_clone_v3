@@ -18,7 +18,7 @@ def view_places(city_id):
     if city:
         lst = []
         for place in city.places:
-            lst.append(state.to_dict())
+            lst.append(place.to_dict())
         return jsonify(lst.to_dict())
     abort(404)
 
@@ -52,13 +52,15 @@ def create_place(city_id):
 
     if not storage.get(City, city_id):
         abort(404)
-    if not storage.get(User, data['user_id']):
-        abort(404)
 
     if 'name' not in data:
         return make_response(jsonify("Missing name"), 400)
+
     if 'user_id' not in data:
         return make_response(jsonify("Missing user_id"), 400)
+
+    if not storage.get(User, data['user_id']):
+        abort(404)
 
     new_place = Place(**data)
     new_place.save()
@@ -78,8 +80,8 @@ def update_place(place_id):
         return make_response(jsonify("Not a JSON"), 400)
 
     for k, v in data.items():
-        if (k != 'id' and k != 'created_at' and k != 'user_id'
-            and k != 'city_id' and k != 'updated_at'):
+        if (k != 'id' and k != 'city_id' and k != 'user_id' and
+           k != 'created_at' and k != 'updated_at'):
             setattr(obj, k, v)
             storage.save()
 
