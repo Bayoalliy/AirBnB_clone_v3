@@ -42,6 +42,10 @@ def create_user():
         data = request.get_json()
     except:
         return make_response(jsonify("Not a JSON"), 400)
+
+    if not isinstance(data, dict):
+        return make_response(jsonify("Not a JSON"), 400)
+
     if 'email' not in data:
         return make_response(jsonify("Missing email"), 400)
     if 'password' not in data:
@@ -62,6 +66,9 @@ def update_user(user_id):
     try:
         data = request.get_json()
     except:
+        return make_response(jsonify("Not a JSON"), 400)
+
+    if not isinstance(data, dict):
         return make_response(jsonify("Not a JSON"), 400)
 
     for k, v in data.items():
