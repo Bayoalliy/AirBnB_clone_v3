@@ -42,8 +42,10 @@ def create_user():
         data = request.get_json()
     except:
         return make_response(jsonify("Not a JSON"), 400)
-    if 'name' not in data:
-        return make_response(jsonify("Missing name"), 400)
+    if 'email' not in data:
+        return make_response(jsonify("Missing email"), 400)
+    if 'password' not in data:
+        return make_response(jsonify("Missing password"), 400)
 
     new_user = User(**data)
     new_user.save()
@@ -63,7 +65,8 @@ def update_user(user_id):
         return make_response(jsonify("Not a JSON"), 400)
 
     for k, v in data.items():
-        if k != 'id' and k != 'created_at' and k != 'updated_at':
+        if (k != 'id' and k != 'created_at' and
+           k != 'updated_at'and k != 'email'):
             setattr(obj, k, v)
             storage.save()
 
