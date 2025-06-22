@@ -66,9 +66,9 @@ def create_review(place_id):
         abort(404)
 
     data['place_id'] = place_id
-    new_amenity = Amenity(**data)
-    new_amenity.save()
-    return make_response(jsonify(new_amenity.to_dict()), 201)
+    new_review = Review(**data)
+    new_review.save()
+    return make_response(jsonify(new_review.to_dict()), 201)
 
 
 @app_views.route('/reviews/<review_id>',
