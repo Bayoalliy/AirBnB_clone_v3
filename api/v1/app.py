@@ -8,8 +8,10 @@ from flask import Flask, jsonify, make_response
 from os import getenv
 from models import storage
 from api.v1.views import app_views
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://0.0.0.0"}})
 api_host = getenv("HBNB_API_HOST")
 api_port = getenv("HBNB_API_PORT")
 
