@@ -50,6 +50,9 @@ def create_place(city_id):
     except:
         return make_response(jsonify("Not a JSON"), 400)
 
+    if not isinstance(data, dict):
+        return make_response(jsonify("Not a JSON"), 400)
+
     if not storage.get(City, city_id):
         abort(404)
 
@@ -62,6 +65,7 @@ def create_place(city_id):
     if not storage.get(User, data['user_id']):
         abort(404)
 
+    data['city_id'] = city_id
     new_place = Place(**data)
     new_place.save()
     return make_response(jsonify(new_place.to_dict()), 201)
@@ -77,6 +81,9 @@ def update_place(place_id):
     try:
         data = request.get_json()
     except:
+        return make_response(jsonify("Not a JSON"), 400)
+
+    if not isinstance(data, dict):
         return make_response(jsonify("Not a JSON"), 400)
 
     for k, v in data.items():
