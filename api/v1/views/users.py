@@ -20,7 +20,7 @@ def view_users(user_id=None):
         abort(404)
     lst = []
     for user in storage.all(User).values():
-        lst.append(amenity.to_dict())
+        lst.append(user.to_dict())
 
     return jsonify(lst)
 
