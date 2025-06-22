@@ -19,7 +19,7 @@ def view_places(city_id):
         lst = []
         for place in city.places:
             lst.append(place.to_dict())
-        return jsonify(lst.to_dict())
+        return jsonify(lst)
     abort(404)
 
 
