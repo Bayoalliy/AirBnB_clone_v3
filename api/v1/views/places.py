@@ -8,27 +8,33 @@ from flask import jsonify, make_response, request, abort
 import json
 from models import storage
 from models.place import Place
+from models.city import City
+from models.user import User
 
 
-@app_views.route('/es', strict_slashes=False)
-@app_views.route('/states/<state_id>', strict_slashes=False)
-def view_states(state_id=None):
-    if state_id:
-        res = storage.get(State, state_id)
-        if res:
-            return jsonify(res.to_dict())
-        abort(404)
-    lst = []
-    for state in storage.all(State).values():
-        lst.append(state.to_dict())
-
-    return jsonify(lst)
+@app_views.route('/cities/<city_id>/places', strict_slashes=False)
+def view_places(city_id):
+    city = storage.get(City, city_id)
+    if city:
+        lst = []
+        for place in city.places:
+            lst.append(state.to_dict())
+        return jsonify(lst.to_dict())
+    abort(404)
 
 
-@app_views.route('/states/<state_id>',
+@app_views.route('/places/<place_id>', strict_slashes=False)
+def view_a_place(place_id):
+    place = storage.get(Place, place_id)
+    if place:
+        return jsonify(place.to_dict())
+    abort(404)
+
+
+@app_views.route('/places/<place_id>',
                  strict_slashes=False, methods=['DELETE'])
-def delete_state(state_id):
-    obj = storage.get(State, state_id)
+def delete_place(place_id):
+    obj = storage.get(Place, place_id)
     if obj:
         storage.delete(obj)
         storage.save()
@@ -36,23 +42,33 @@ def delete_state(state_id):
     abort(404)
 
 
-@app_views.route('/states', strict_slashes=False, methods=['POST'])
-def create_state():
+@app_views.route('/cities/<city_id>/places',
+                 strict_slashes=False, methods=['POST'])
+def create_place(city_id):
     try:
         data = request.get_json()
     except:
         return make_response(jsonify("Not a JSON"), 400)
+
+    if not storage.get(City, city_id):
+        abort(404)
+    if not storage.get(User, data['user_id']):
+        abort(404)
+
     if 'name' not in data:
         return make_response(jsonify("Missing name"), 400)
+    if 'user_id' not in data:
+        return make_response(jsonify("Missing user_id"), 400)
 
-    new_state = State(**data)
-    new_state.save()
-    return make_response(jsonify(new_state.to_dict()), 201)
+    new_place = Place(**data)
+    new_place.save()
+    return make_response(jsonify(new_place.to_dict()), 201)
 
 
-@app_views.route('/states/<state_id>', strict_slashes=False, methods=['PUT'])
-def update_state(state_id):
-    obj = storage.get(State, state_id)
+@app_views.route('/places/<place_id>',
+                 strict_slashes=False, methods=['PUT'])
+def update_place(place_id):
+    obj = storage.get(Place, place_id)
     if not obj:
         abort(404)
 
@@ -62,7 +78,8 @@ def update_state(state_id):
         return make_response(jsonify("Not a JSON"), 400)
 
     for k, v in data.items():
-        if k != 'id' and k != 'created_at' and k != 'updated_at':
+        if (k != 'id' and k != 'created_at' and k != 'user_id'
+            and k != 'city_id' and k != 'updated_at'):
             setattr(obj, k, v)
             storage.save()
 
