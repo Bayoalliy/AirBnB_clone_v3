@@ -74,10 +74,14 @@ def update_user(user_id):
     if not isinstance(data, dict):
         return make_response(jsonify("Not a JSON"), 400)
 
+    if "password" in data:
+        pwd = data['password']
+        data['password'] = md5(pwd.encode().hexidigest())
+
     for k, v in data.items():
         if (k != 'id' and k != 'created_at' and
            k != 'updated_at'and k != 'email'):
             setattr(obj, k, v)
-            storage.save()
+    storage.save()
 
     return make_response(jsonify(obj.to_dict()), 200)
