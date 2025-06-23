@@ -121,7 +121,7 @@ def filter_places():
                     place_lst.append(place)
 
     if not place_lst:
-        all_place = storage.all(Place).values()
+        place_lst = storage.all(Place).values()
 
     if data.get('amenities'):
         amenity_lst = []
