@@ -24,7 +24,7 @@ def view_linked_amenities(place_id):
 
 @app_views.route('/places/<place_id>/amenities/<amenity_id>',
                  strict_slashes=False, methods=['DELETE'])
-def unlink_amenity(amenity_id):
+def unlink_amenity(amenity_id, place_id):
     place = storage.get(Place, place_id)
     amenity_obj = storage.get(Amenity, amenity_id)
     if place and amenity_obj:
@@ -36,7 +36,7 @@ def unlink_amenity(amenity_id):
 
 @app_views.route('/places/<place_id>/amenities/<amenity_id>',
                  strict_slashes=False, methods=['POST'])
-def link_amenity_to_place(place_id):
+def link_amenity_to_place(place_id, amenity_id):
     place = storage.get(Place, place_id)
     amenity = storage.get(Amenity, amenity_id)
 
