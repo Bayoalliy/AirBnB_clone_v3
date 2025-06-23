@@ -8,6 +8,7 @@ from flask import jsonify, make_response, request, abort
 import json
 from models import storage
 from models.user import User
+from hashlib import md5
 
 
 @app_views.route('/users', strict_slashes=False)
@@ -51,6 +52,8 @@ def create_user():
     if 'password' not in data:
         return make_response(jsonify("Missing password"), 400)
 
+    pwd = data['password']
+    data['password'] = md5(pwd.encode().hexidigest())
     new_user = User(**data)
     new_user.save()
     return make_response(jsonify(new_user.to_dict()), 201)
