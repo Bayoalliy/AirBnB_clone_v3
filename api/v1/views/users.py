@@ -53,7 +53,7 @@ def create_user():
         return make_response(jsonify("Missing password"), 400)
 
     pwd = data['password']
-    data['password'] = md5(pwd.encode().hexidigest())
+    data['password'] = md5(pwd.encode()).hexdigest()
     new_user = User(**data)
     new_user.save()
     return make_response(jsonify(new_user.to_dict()), 201)
@@ -76,7 +76,7 @@ def update_user(user_id):
 
     if "password" in data:
         pwd = data['password']
-        data['password'] = md5(pwd.encode().hexidigest())
+        data['password'] = md5(pwd.encode()).hexdigest()
 
     for k, v in data.items():
         if (k != 'id' and k != 'created_at' and
