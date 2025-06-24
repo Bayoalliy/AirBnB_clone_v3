@@ -123,5 +123,3 @@ class TestFileStorage(unittest.TestCase):
         """tests the coun method"""
         self.assertEqual(len(storage.all()), storage.count())
         self.assertEqual(len(storage.all(State)), storage.count(State))
-
-
