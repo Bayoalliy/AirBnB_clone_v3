@@ -133,4 +133,8 @@ def filter_places():
             if not set(amenity_lst).issubset(set(place.amenities)):
                 place_lst.remove(place)
 
-    return jsonify([place.to_dict() for place in place_lst])
+    res = [place.to_dict() for place in place_lst]
+    for dic in res:
+        if dic.get('amenities'):
+            del dic['amenities']
+    return jsonify(res)
