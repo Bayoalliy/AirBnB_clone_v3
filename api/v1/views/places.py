@@ -130,8 +130,10 @@ def filter_places():
         for amenity_id in data['amenities']:
             amenity_lst.append(storage.get(Amenity, amenity_id))
         for place in place_lst:
-            if not set(amenity_lst).issubset(set(place.amenities)):
-                place_lst.remove(place)
+            for amenity in amenity_lst:
+                if amenity not in place.amenities:
+                    place_lst.remove(place)
+                    break
 
     res = [place.to_dict() for place in place_lst]
     for dic in res:
