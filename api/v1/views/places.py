@@ -127,9 +127,10 @@ def filter_places():
 
     if data.get('amenities'):
         amenity_lst = []
+        tmp_lst = place_lst[:]
         for amenity_id in data['amenities']:
             amenity_lst.append(storage.get(Amenity, amenity_id))
-        for place in place_lst:
+        for place in tmp_lst:
             for amenity in amenity_lst:
                 if amenity not in place.amenities:
                     place_lst.remove(place)
